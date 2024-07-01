@@ -1,3 +1,4 @@
+import datetime
 import time
 import requests
 
@@ -7,15 +8,31 @@ GET = "get"
 PATCH = "patch"
 DELETE = "delete"
 
+def get_embedded_messaged_template(content="", title="", url="", description=""):
+	data = {
+		"content": content,
+		"embed": {
+			"title": title,
+			"color": 8564590,
+			"thumbnail": {},
+			"image": {},
+			"description": description,
+			"fields": []
+		}
+	}
+	if url:
+		data['embed']['url'] = url
+	return data
+
 def send_request(type, url, headers, data={}, should_retry=True):
 	valid_status_codes = [200, 204]
 
-	if type == POST:
-		r = requests.post(url, headers=headers, data=data)
-	elif type == PUT:
-		r = requests.put(url, headers=headers)
-	elif type == GET:
+	if type == GET:
 		r = requests.get(url, headers=headers)
+#	elif type == POST:
+#		r = requests.post(url, headers=headers, data=data)
+#	elif type == PUT:
+#		r = requests.put(url, headers=headers)
 	elif type == PATCH:
 		r = requests.patch(url, headers=headers, data=data)
 	elif type == DELETE:
